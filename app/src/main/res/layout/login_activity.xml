@@ -8,13 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/username"
-        android:hint="Enter Username"/>
+        android:hint="Enter Username"
+        android:layout_weight="0.09" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/password"
         android:inputType="textPassword"
-        android:hint="Enter Password"/>
+        android:hint="Enter Password"
+        android:layout_weight="0.07" />
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,9 +24,10 @@
         android:id="@+id/remember_me"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="67dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/login_button"
-        android:text="@string/Login" />
+        android:text="@string/Login"
+        android:layout_weight="0.06" />
 
 </LinearLayout>
