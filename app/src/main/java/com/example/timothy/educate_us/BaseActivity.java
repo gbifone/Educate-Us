@@ -1,5 +1,8 @@
 package com.example.timothy.educate_us;
 
+/**
+ * Created by Timothy on 1/25/2017.
+ */
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,8 +77,6 @@ public class BaseActivity extends AppCompatActivity
     }
 
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();

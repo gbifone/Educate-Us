@@ -18,6 +18,7 @@ import android.widget.Toast;
  */
 
 public class LoginActivity extends Activity {
+
     public static String PREFS_NAME = "name";
     public static String PREF_USERNAME = "username";
     public static String PREF_PASSWORD = "password";
@@ -27,6 +28,7 @@ public class LoginActivity extends Activity {
     private MainDatabase MD;
     private CSVImport csvImport;
     private String msg = "Educate-Us";
+
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -55,8 +57,6 @@ public class LoginActivity extends Activity {
         getUser();
     }
     public void doLogin(View view) {
-        final String TABLE_NAME = "TABLE_1";
-
         EditText getUsername = (EditText) findViewById(R.id.username);
         EditText getPassword = (EditText) findViewById(R.id.password);
 
@@ -87,6 +87,7 @@ public class LoginActivity extends Activity {
         SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String prefUsername = pref.getString(PREF_USERNAME, null);
         String prefPassword = pref.getString(PREF_PASSWORD, null);
+
         if(prefUsername != null || prefPassword != null)
         {
             Intent intent = new Intent(this, HomeActivity.class);

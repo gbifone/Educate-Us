@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 
 public class MainDatabase {
 
-    String TAG = "DBAdapter";
     public static final String LOGIN_TABLE = "TABLE_1";
     public static final String id = "id";
     public static final String LOGIN_COL_1 = "login";
@@ -36,11 +35,9 @@ public class MainDatabase {
     public static final String COURSES_COL_4 = "FourthPeriod";
     public static final String COURSES_COL_5 = "FifthPeriod";
     public static final String COURSES_COL_6 = "SixthPeriod";
-    public static final String FORUM_COL_1 = "forums";
 
     public SQLiteDatabase db;
     private DBHelper dbHelper;
-    private AssetManager manager;
 
     public MainDatabase(Context context) {
 
@@ -65,32 +62,15 @@ public class MainDatabase {
         }
     }
 
-    public SQLiteDatabase getDataabaseInstance()
-    {
-        return db;
-    }
-
-    public void getTransaction() {
-        db.beginTransaction();
-    }
-
     public void close() {
         dbHelper.close();
-    }
-
-    public void setTransaction() {
-        db.setTransactionSuccessful();
-    }
-
-    public void endTran() {
-        db.endTransaction();
     }
 
     public void insert(String table, ContentValues value) {
         db.insert(table, null, value);
     }
 
-    public String getEntry(String input, String secondInput)
+    public String getEntry(String input, String secondInput, String thirdInput, String fourthInput)
     {
         Cursor cursor = db.query(LOGIN_TABLE, null, "" + secondInput + "=?", new String[]{input},null,null,null);
         if(cursor.getCount() < 1)
@@ -99,9 +79,9 @@ public class MainDatabase {
             return "Does not exist";
         }
         cursor.moveToFirst();
-        String password = cursor.getString(cursor.getColumnIndex("password"));
+        String output = cursor.getString(cursor.getColumnIndex(fourthInput));
         cursor.close();
-        return password;
+        return output;
     }
     public void delete()
     {

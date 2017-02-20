@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CoursesDatabase {
 
-    String TAG = "DBAdapter";
+ /*   String TAG = "DBAdapter";
     public static final String COURSES_TABLE = "course_table";
     public static final String COURSE_NAME = "course_name";
     public static final String TEACHER_NAME = "teacher_name";
@@ -78,7 +78,7 @@ public class CoursesDatabase {
         db.insert(table, null, value);
     }
 
-    public String getEntry(String input, String secondInput)
+    public String getEntry(String input, String secondInput, String thirdInput, String fourthInput)
     {
         Cursor cursor = db.query(LOGIN_TABLE, null, "" + secondInput + "=?", new String[]{input},null,null,null);
         if(cursor.getCount() < 1)
@@ -87,9 +87,9 @@ public class CoursesDatabase {
             return "Does not exist";
         }
         cursor.moveToFirst();
-        String password = cursor.getString(cursor.getColumnIndex("password"));
+        String output= cursor.getString(cursor.getColumnIndex("password"));
         cursor.close();
-        return password;
+        return output;
     }
 
     public List<Course> getAllCourses()
@@ -145,5 +145,5 @@ public class CoursesDatabase {
             onCreate(db);
         }
     }
-
+*/
 }

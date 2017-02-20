@@ -10,8 +10,8 @@ import java.util.List;
  * Created by Timothy on 2/12/2017.
  */
 
-public class CourseAdapter extends ArrayAdapter<Course> {
-    private Context context;
+public class CourseAdapter /* extends ArrayAdapter<Course>*/ {
+ /*   private Context context;
     private int resource;
     private ArrayList<Course> data;
     private CoursesDatabase CD;
@@ -29,4 +29,5 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     {
         return CD.getAllCourses();
     }
+    */
 }
