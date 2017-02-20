@@ -22,8 +22,7 @@ public class LoginActivity extends Activity {
     public static String PREF_USERNAME = "username";
     public static String PREF_PASSWORD = "password";
     public static String username;
-    private static String data_user = "admin";
-    private static String data_pass = "pass";
+    public static String password;
     private Button button;
     private MainDatabase MD;
     private CSVImport csvImport;
@@ -62,19 +61,21 @@ public class LoginActivity extends Activity {
         EditText getPassword = (EditText) findViewById(R.id.password);
 
         username = getUsername.getText().toString();
-        String password = getPassword.getText().toString();
+        password = getPassword.getText().toString();
 
-        String storedPassword = MD.getEntry(username, "login");
+        String storedPassword = MD.getEntry(username, "login", password, "password");
 
         if (password.equals(storedPassword))
         {
             CheckBox ch = (CheckBox) findViewById(R.id.remember_me);
             if(ch.isChecked())
             {
-                rememberInput(username, password);
+                getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putString(PREF_USERNAME, username).putString(PREF_PASSWORD, password).commit();
 
             }
-            getHomeActivity();
+            Intent intent = new Intent(this, HomeActivity.class);
+            this.startActivity(intent);
+            finish();
         }
         else
         {
@@ -84,23 +85,14 @@ public class LoginActivity extends Activity {
     public void getUser()
     {
         SharedPreferences pref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String username = pref.getString(PREF_USERNAME, null);
-        String password = pref.getString(PREF_PASSWORD, null);
-        if(username != null || password != null)
+        String prefUsername = pref.getString(PREF_USERNAME, null);
+        String prefPassword = pref.getString(PREF_PASSWORD, null);
+        if(prefUsername != null || prefPassword != null)
         {
-            getHomeActivity();
+            Intent intent = new Intent(this, HomeActivity.class);
+            this.startActivity(intent);
+            finish();
         }
-    }
-    public void rememberInput(String username, String password)
-    {
-        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putString(PREF_USERNAME, username).putString(PREF_PASSWORD, password).commit();
-    }
-    public void getHomeActivity()
-    {
-
-        Intent intent = new Intent(this, HomeActivity.class);
-        this.startActivity(intent);
-        finish();
     }
 
     @Override
