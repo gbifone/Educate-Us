@@ -38,16 +38,16 @@ public class CSVCouresImport extends Activity {
                 String courseName = col[1];
                 String teacherName = col[2];
                 String URL = col[3];
-           //     String reading = col[4];
-            //    String assignment = col[5];
+                String reading = col[4];
+                String assignment = col[5];
 
                 ContentValues cv = new ContentValues();
                 cv.put("id", id);
                 cv.put("course_name", courseName);
                 cv.put("teacher_name", teacherName);
                 cv.put("URLs", URL);
-            //    cv.put("reading_name", reading);
-             //   cv.put("assignment_name", assignment);
+                cv.put("readings", reading);
+                cv.put("assignments", assignment);
 
                 CD.insert("COURSE_TABLE", cv);
 

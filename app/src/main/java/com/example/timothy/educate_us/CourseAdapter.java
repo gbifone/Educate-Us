@@ -30,8 +30,8 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     public static final String TEACHER_NAME = "teacher_name";
     public static final String URLs = "URLs";
     public static final String READINGS_NAME = "readings";
-    public static final String ASSIGNMENTS_NAME = "assignemnts";
-    public String[] allColumns = {id, COURSE_NAME, TEACHER_NAME, URLs/*, READINGS_NAME, ASSIGNMENTS_NAME*/};
+    public static final String ASSIGNMENTS_NAME = "assignments";
+    public String[] allColumns = {COURSE_NAME, TEACHER_NAME, URLs, READINGS_NAME, ASSIGNMENTS_NAME};
 
     private CoursesDatabase dbHelper;
     private AssetManager manager;
@@ -71,7 +71,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
             holder = new CourseHolder();
             holder.courseName = (TextView)row.findViewById(R.id.courseTitle);
             holder.teacherName = (TextView) row.findViewById(R.id.teacherName);
-            holder.URLs = (TextView) row.findViewById(R.id.URLText);
+
             row.setTag(holder);
         }
         else
@@ -81,7 +81,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         Course course = data.get(position);
         holder.courseName.setText(course.getCourseName());
         holder.teacherName.setText(course.getTeacherName());
-        holder.URLs.setText(course.getURL());
+
 
 
         return row;
@@ -97,6 +97,11 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     public void close() {
         dbHelper.close();
     }
+    public void upgrade()
+    {
+        dbHelper.onUpgrade(db, 4, 5);
+    }
+
 
     public void insert(String table, ContentValues value) {
         db.insert(table, null, value);
@@ -104,7 +109,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
 
     public Course getCourse(String courseName)
     {
-        Cursor cursor = db.query(COURSES_TABLE, new String[] {COURSE_NAME, TEACHER_NAME, URLs/*, READINGS_NAME, */}, COURSE_NAME + "=?", new String[] {
+        Cursor cursor = db.query(COURSES_TABLE, new String[] {COURSE_NAME, TEACHER_NAME, URLs, READINGS_NAME, ASSIGNMENTS_NAME}, COURSE_NAME + "=?", new String[] {
                 courseName}, null, null, null);
         if(cursor != null)
         {
@@ -125,8 +130,8 @@ public class CourseAdapter extends ArrayAdapter<Course> {
                 course.setCourseName(cursor.getString(0));
                 course.setTeacherName(cursor.getString(1));
                 course.setURL(cursor.getString(2));
-            //    course.setReading(cursor.getString(3));
-             //   course.setAssignment(cursor.getString(4));
+                course.setReading(cursor.getString(3));
+                course.setAssignment(cursor.getString(4));
                 courseList.add(course);
             }while(cursor.moveToNext());
             cursor.close();
@@ -159,7 +164,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         public void onCreate(SQLiteDatabase db) {
             Log.d("Educate-Us", "database created was used");
             db.execSQL("CREATE TABLE " + COURSES_TABLE + "(" + id + " INTEGER NOT NULL PRIMARY KEY," +
-                    COURSE_NAME + " TEXT," + TEACHER_NAME + " TEXT,"+ URLs + " TEXT"/*,*/+ /*READINGS_NAME + " TEXT,"+ ASSIGNMENTS_NAME + " TEXT" + */")");
+                    COURSE_NAME + " TEXT," + TEACHER_NAME + " TEXT,"+ URLs + " TEXT,"+ READINGS_NAME + " TEXT,"+ ASSIGNMENTS_NAME + " TEXT" + ")");
         }
 
         @Override

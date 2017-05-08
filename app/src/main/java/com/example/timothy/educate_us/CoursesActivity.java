@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +50,12 @@ public class CoursesActivity extends BaseActivity{
             csvCouresImport = new CSVCouresImport();
             csvCouresImport.importCSVCourse(this, CD);
         }
+        else
+        {
+            CD.upgrade();
+            csvCouresImport = new CSVCouresImport();
+            csvCouresImport.importCSVCourse(this, CD);
+        }
 
         courses = CD.getAllCourses();
         for(Course cn : courses)
@@ -76,14 +83,16 @@ public class CoursesActivity extends BaseActivity{
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.screen_list, null);
+        final View dialogView = inflater.inflate(R.layout.screen_list_pop, null);
 
         final TextView URL = (TextView)  dialogView.findViewById(R.id.URLText);
-      //  final TextView assign = (TextView) dialogView.findViewById(R.id.assText) ;
-      //  final TextView read = (TextView) dialogView.findViewById(R.id.readingText) ;
+        final TextView assign = (TextView) dialogView.findViewById(R.id.assText) ;
+        final TextView read = (TextView) dialogView.findViewById(R.id.readingText) ;
         URL.setText("Useful URL: " + imageArry.get(position).getURL());
-      //  assign.setText(imageArry.get(position).getAssignment());
-       // read.setText(imageArry.get(position).getReading());
+        read.setText("This week's readings: " + imageArry.get(position).getReading());
+        assign.setText("This week's assignment:" + imageArry.get(position).getAssignment());
+
+
         dialogBuilder.setView(dialogView);
         dialogBuilder.setTitle("Course Information");
 
