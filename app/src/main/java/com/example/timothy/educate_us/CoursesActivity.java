@@ -1,6 +1,8 @@
 package com.example.timothy.educate_us;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,46 +25,81 @@ import java.util.List;
 
 public class CoursesActivity extends BaseActivity{
     String msg = "Educate-Us";
-    public CoursesDatabase CD;
+    private CourseAdapter CD;
     private CSVCouresImport csvCouresImport;
     private ListView dataList;
     private ArrayList<Course> courseArray = new ArrayList<>();
     private List<Course> courses;
-    private CourseAdapter courseAdapter;
     private AlertDialog b;
     private MainDatabase MD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.activity_content);
-        getLayoutInflater().inflate(R.layout.course_activity_main, contentFrameLayout);
+        setContentView(R.layout.course_activity_main);
         dataList = (ListView) findViewById(R.id.list);
-        CD = new CoursesDatabase(this);
 
-        courseAdapter = new CourseAdapter(this, R.layout.screen_list, courseArray);
+        CD = new CourseAdapter(this, R.layout.screen_list, courseArray);
 
-        courseAdapter.open();
 
-        if(courseAdapter.getReadableDatabase()) {
+        CD.open();
+
+        if(!CD.getReadableDatabase()) {
 
             csvCouresImport = new CSVCouresImport();
-            csvCouresImport.importCSVCourse(this, courseAdapter);
+            csvCouresImport.importCSVCourse(this, CD);
         }
 
-        courses = courseAdapter.getAllCourses();
+        courses = CD.getAllCourses();
         for(Course cn : courses)
         {
             courseArray.add(cn);
         }
 
-        dataList.setAdapter(courseAdapter);
+        dataList.setAdapter(CD);
 
 
+        dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getCourseContent(courseArray, position, parent);
+            }
+        });
 
 
     }
+
+
+    public void getCourseContent(final ArrayList<Course> imageArry, final int position, final AdapterView<?> parent)
+    {
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.screen_list, null);
+
+        final TextView URL = (TextView)  dialogView.findViewById(R.id.URLText);
+      //  final TextView assign = (TextView) dialogView.findViewById(R.id.assText) ;
+      //  final TextView read = (TextView) dialogView.findViewById(R.id.readingText) ;
+        URL.setText("Useful URL: " + imageArry.get(position).getURL());
+      //  assign.setText(imageArry.get(position).getAssignment());
+       // read.setText(imageArry.get(position).getReading());
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setTitle("Course Information");
+
+        dialogBuilder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+            }
+        });
+
+        b = dialogBuilder.create();
+        b.show();
+    }
+
+
+
+
 
   /*  public void getCourseContent(final ArrayList<Course> courseArry, final int position, final AdapterView<?> parent)
     {

@@ -1,11 +1,17 @@
 package com.example.timothy.educate_us;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -18,13 +24,22 @@ import java.util.List;
 
 public class CourseAdapter extends ArrayAdapter<Course> {
 
+    public static final String COURSES_TABLE = "COURSE_TABLE";
+    public static final String id = "id";
+    public static final String COURSE_NAME = "course_name";
+    public static final String TEACHER_NAME = "teacher_name";
+    public static final String URLs = "URLs";
+    public static final String READINGS_NAME = "readings";
+    public static final String ASSIGNMENTS_NAME = "assignemnts";
+    public String[] allColumns = {id, COURSE_NAME, TEACHER_NAME, URLs/*, READINGS_NAME, ASSIGNMENTS_NAME*/};
+
     private CoursesDatabase dbHelper;
     private AssetManager manager;
     private Context context;
     private int layoutResourceId;
     private ArrayList<Course> data= new ArrayList<>();
     private SQLiteDatabase db;
-    private MainDatabase MD;
+    private String username;
 
 
     public CourseAdapter(Context context, int layoutResouceId, ArrayList<Course> data) {
@@ -33,7 +48,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         this.context = context;
         this.data = data;
         dbHelper = new CoursesDatabase(context);
-
+        this.username = LoginActivity.username;
 
     }
 
@@ -42,6 +57,37 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         db = dbHelper.getWritableDatabase();
 
     }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        CourseHolder holder;
+
+        if(row == null)
+        {
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            row = inflater.inflate(layoutResourceId, parent, false);
+
+            holder = new CourseHolder();
+            holder.courseName = (TextView)row.findViewById(R.id.courseTitle);
+            holder.teacherName = (TextView) row.findViewById(R.id.teacherName);
+            holder.URLs = (TextView) row.findViewById(R.id.URLText);
+            row.setTag(holder);
+        }
+        else
+        {
+            holder = (CourseHolder)row.getTag();
+        }
+        Course course = data.get(position);
+        holder.courseName.setText(course.getCourseName());
+        holder.teacherName.setText(course.getTeacherName());
+        holder.URLs.setText(course.getURL());
+
+
+        return row;
+
+    }
+
 
     public boolean getReadableDatabase()
     {
@@ -58,7 +104,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
 
     public Course getCourse(String courseName)
     {
-        Cursor cursor = db.query(CoursesDatabase.COURSES_TABLE, new String[] {CoursesDatabase.COURSE_NAME, CoursesDatabase.TEACHER_NAME, CoursesDatabase.URLs, CoursesDatabase.READINGS_NAME, CoursesDatabase.ASSIGNMENTS_NAME}, CoursesDatabase.COURSE_NAME + "=?", new String[] {
+        Cursor cursor = db.query(COURSES_TABLE, new String[] {COURSE_NAME, TEACHER_NAME, URLs/*, READINGS_NAME, */}, COURSE_NAME + "=?", new String[] {
                 courseName}, null, null, null);
         if(cursor != null)
         {
@@ -71,7 +117,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     public List<Course> getAllCourses()
     {
         List<Course> courseList = new ArrayList<>();
-        Cursor cursor = db.query(CoursesDatabase.COURSES_TABLE, dbHelper.allColumns, null, null, null, null, null);
+        Cursor cursor = db.query(COURSES_TABLE, allColumns, null, null, null, null, null);
         if(cursor.moveToFirst())
         {
             do {
@@ -79,8 +125,8 @@ public class CourseAdapter extends ArrayAdapter<Course> {
                 course.setCourseName(cursor.getString(0));
                 course.setTeacherName(cursor.getString(1));
                 course.setURL(cursor.getString(2));
-                course.setReading(cursor.getString(3));
-                course.setAssignment(cursor.getString(4));
+            //    course.setReading(cursor.getString(3));
+             //   course.setAssignment(cursor.getString(4));
                 courseList.add(course);
             }while(cursor.moveToNext());
             cursor.close();
@@ -96,6 +142,31 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         TextView URLs;
         TextView readingName;
         TextView assignmentName;
+    }
+
+    public class CoursesDatabase extends SQLiteOpenHelper {
+
+
+
+        public static final String DATABASE_NAME = "coursedatabase.db";
+
+        public CoursesDatabase(Context context) {
+            super(context, DATABASE_NAME, null, 4);
+        }
+
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            Log.d("Educate-Us", "database created was used");
+            db.execSQL("CREATE TABLE " + COURSES_TABLE + "(" + id + " INTEGER NOT NULL PRIMARY KEY," +
+                    COURSE_NAME + " TEXT," + TEACHER_NAME + " TEXT,"+ URLs + " TEXT"/*,*/+ /*READINGS_NAME + " TEXT,"+ ASSIGNMENTS_NAME + " TEXT" + */")");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + COURSES_TABLE);
+            onCreate(db);
+        }
     }
 
 }
