@@ -25,7 +25,7 @@ public class LoginActivity extends Activity {
     public static String username;
     public static String password;
     private Button button;
-    private MainDatabase MD;
+    public static MainDatabase MD;
     private CSVImport csvImport;
     private String msg = "Educate-Us";
 
@@ -50,6 +50,12 @@ public class LoginActivity extends Activity {
     {
         super.onStart();
         if(!MD.getReadableDatabase()) {
+            csvImport = new CSVImport();
+            csvImport.importCSVStudent(this, MD);
+        }
+        else
+        {
+            MD.upgrade();
             csvImport = new CSVImport();
             csvImport.importCSVStudent(this, MD);
         }
@@ -100,6 +106,6 @@ public class LoginActivity extends Activity {
     protected void onDestroy()
     {
         super.onDestroy();
-        MD.close();
+
     }
 }

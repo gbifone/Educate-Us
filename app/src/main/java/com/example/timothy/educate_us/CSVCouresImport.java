@@ -32,24 +32,29 @@ public class CSVCouresImport extends Activity {
             BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while((line = buffer.readLine()) != null) {
-                Log.d(msg, line);
-                String[] col = line.split(";", 13);
-                String id = col[0];
-                String courseName = col[1];
-                String teacherName = col[2];
-                String URL = col[3];
-                String reading = col[4];
-                String assignment = col[5];
 
-                ContentValues cv = new ContentValues();
-                cv.put("id", id);
-                cv.put("course_name", courseName);
-                cv.put("teacher_name", teacherName);
-                cv.put("URLs", URL);
-                cv.put("readings", reading);
-                cv.put("assignments", assignment);
+                    Log.d(msg, line);
+                    String[] col = line.split(";", 13);
+                    String id = col[0];
+                    String courseName = col[1];
+                    String teacherName = col[2];
+                    String URL = col[3];
+                    String reading = col[4];
+                    String assignment = col[5];
 
-                CD.insert("COURSE_TABLE", cv);
+                if(LoginActivity.MD.getOtherEntry("FirstPeriod").equals(courseName) || LoginActivity.MD.getOtherEntry("SecondPeriod").equals(courseName) ||
+                        LoginActivity.MD.getOtherEntry("ThirdPeriod").equals(courseName) || LoginActivity.MD.getOtherEntry("FourthPeriod").equals(courseName) ||
+                        LoginActivity.MD.getOtherEntry("FifthPeriod").equals(courseName) || LoginActivity.MD.getOtherEntry("SixthPeriod").equals(courseName) ){
+                    ContentValues cv = new ContentValues();
+                    cv.put("id", id);
+                    cv.put("course_name", courseName);
+                    cv.put("teacher_name", teacherName);
+                    cv.put("URLs", URL);
+                    cv.put("readings", reading);
+                    cv.put("assignments", assignment);
+
+                    CD.insert("COURSE_TABLE", cv);
+                }
 
 
             }

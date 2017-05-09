@@ -37,7 +37,9 @@ public class CoursesActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.course_activity_main);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.activity_content);
+        getLayoutInflater().inflate(R.layout.course_activity_main, contentFrameLayout);
+
         dataList = (ListView) findViewById(R.id.list);
 
         CD = new CourseAdapter(this, R.layout.screen_list, courseArray);
@@ -76,6 +78,7 @@ public class CoursesActivity extends BaseActivity{
 
 
     }
+
 
 
     public void getCourseContent(final ArrayList<Course> imageArry, final int position, final AdapterView<?> parent)

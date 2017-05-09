@@ -69,6 +69,10 @@ public class MainDatabase {
     public void insert(String table, ContentValues value) {
         db.insert(table, null, value);
     }
+    public void upgrade()
+    {
+        dbHelper.onUpgrade(db, 4, 5);
+    }
 
     public String getEntry(String input, String secondInput, String thirdInput, String fourthInput)
     {
@@ -80,6 +84,19 @@ public class MainDatabase {
         }
         cursor.moveToFirst();
         String output = cursor.getString(cursor.getColumnIndex(fourthInput));
+        cursor.close();
+        return output;
+    }
+    public String getOtherEntry(String input)
+    {
+        Cursor cursor = db.query(LOGIN_TABLE, null, "" + LOGIN_COL_1 + "=?", new String[]{LoginActivity.username},null,null,null);
+        if(cursor.getCount() < 1)
+        {
+            cursor.close();
+            return "Does not exist";
+        }
+        cursor.moveToFirst();
+        String output = cursor.getString(cursor.getColumnIndex(input));
         cursor.close();
         return output;
     }

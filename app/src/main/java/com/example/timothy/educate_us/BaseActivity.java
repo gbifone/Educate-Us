@@ -102,6 +102,9 @@ public class BaseActivity extends AppCompatActivity
             SharedPreferences.Editor editor = settings.edit();
             editor.remove("logged");
             editor.commit();
+            LoginActivity.MD.close();
+            Intent intent = new Intent(this, LoginActivity.class);
+            this.startActivity(intent);
             drawer.closeDrawers();
             finish();
 
